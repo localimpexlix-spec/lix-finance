@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0"/>
+<title>LIX Finance</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{background:#f0fdf4;font-family:'DM Sans',sans-serif;color:#14532d;min-height:100vh}
+input,select,button{font-family:'DM Sans',sans-serif;outline:none}
+button{cursor:pointer;border:none}
+.hidden{display:none!important}
+.screen{display:none;padding:16px;max-width:700px;margin:0 auto;padding-bottom:100px}
+.screen.active{display:block}
+#setup{min-height:100vh;background:linear-gradient(135deg,#14532d,#16a34a);display:flex;align-items:center;justify-content:center;padding:24px}
+#setup .box{background:#fff;border-radius:20px;padding:32px;max-width:360px;width:100%;box-shadow:0 20px 60px #00000030}
+#header{background:linear-gradient(135deg,#14532d,#16a34a);padding:14px 16px 0;position:sticky;top:0;z-index:100;box-shadow:0 4px 20px #16a34a40}
+.hdr-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px}
+.corpus-strip{background:#ffffff20;border-radius:8px 8px 0 0;padding:6px 14px;display:flex;justify-content:space-between;align-items:center;margin-top:6px}
+.tabs{display:flex;gap:4px;margin-top:4px}
+.tab{flex:1;padding:9px 4px 7px;background:transparent;border:none;border-radius:10px 10px 0 0;color:#bbf7d0;font-weight:600;font-size:11px;font-family:'Sora',sans-serif}
+.tab.active{background:#fff;color:#16a34a}
+.card{background:#fff;border-radius:14px;padding:16px;box-shadow:0 2px 12px #16a34a14;margin-bottom:14px;border:1px solid #dcfce7}
+.inp{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:9px 12px;font-size:14px;color:#14532d;width:100%}
+.lbl{display:block;font-size:11px;font-weight:600;color:#16a34a;margin-bottom:4px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.row-item{background:#fff;border-radius:12px;padding:12px 14px;margin-bottom:8px;box-shadow:0 1px 6px #16a34a12;border:1px solid #dcfce7;display:flex;align-items:center;gap:12px}
+.date-hdr{display:flex;justify-content:space-between;padding:6px 12px;background:#dcfce7;border-radius:8px;margin-bottom:6px}
+.subtabs{display:flex;gap:6px;margin-bottom:16px}
+.subtab{flex:1;padding:9px;background:#fff;color:#16a34a;border-radius:10px;font-family:'Sora',sans-serif;font-weight:700;font-size:13px;border:1px solid #16a34a30}
+.subtab.active{background:#16a34a;color:#fff}
+.sum-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.bar-chart{display:flex;align-items:flex-end;gap:3px;height:160px;padding:0 0 24px;overflow-x:auto}
+.bar-wrap{display:flex;flex-direction:column;align-items:center;min-width:28px;flex:1}
+.bar-lbl{font-size:8px;color:#6b7280;margin-top:4px;text-align:center;white-space:nowrap}
+.pct-row{margin-bottom:10px}
+.pct-track{height:8px;background:#f0fdf4;border-radius:4px;overflow:hidden}
+.pct-fill{height:100%;border-radius:4px}
+.info-box{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:10px 14px;font-size:12px;color:#166534;line-height:1.5;margin-bottom:12px}
+.sec-head{font-family:'Sora',sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;margin-bottom:8px;margin-top:4px}
+.nw-big{background:#ede9fe;border-radius:12px;padding:14px 16px;margin-bottom:16px;border:1px solid #7c3aed30;display:flex;justify-content:space-between;align-items:center}
+#pdfBtn{position:fixed;bottom:20px;right:20px;background:linear-gradient(135deg,#14532d,#16a34a);color:#fff;border-radius:50px;padding:13px 22px;font-family:'Sora',sans-serif;font-weight:700;font-size:13px;box-shadow:0 4px 20px #16a34a60;z-index:200}
+</style>
+</head>
+<body>
+
+<div id="setup">
+  <div class="box">
+    <div style="font-size:48px;text-align:center;margin-bottom:8px">&#128184;</div>
+    <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:26px;color:#14532d;text-align:center">LIX Finance</div>
+    <div style="font-size:13px;color:#6b7280;text-align:center;margin-bottom:20px">Smart Money Tracker</div>
+    <label style="font-family:'Sora',sans-serif;font-weight:700;font-size:15px;color:#14532d;display:block;margin-bottom:8px">Set your opening balance</label>
+    <div style="font-size:13px;color:#6b7280;margin-bottom:12px">Total cash in hand + bank right now</div>
+    <div style="position:relative;margin-bottom:16px">
+      <span style="position:absolute;left:12px;top:50%;transform:translateY(-50%);font-weight:700;color:#16a34a;font-size:18px">&#8377;</span>
+      <input type="number" id="setupInput" placeholder="e.g. 15000" style="width:100%;padding:14px 14px 14px 30px;border-radius:10px;border:2px solid #bbf7d0;font-size:18px;color:#14532d;font-family:'Sora',sans-serif;font-weight:700"/>
+    </div>
+    <button onclick="doSetup()" style="width:100%;padding:16px;background:linear-gradient(135deg,#14532d,#16a34a);color:#fff;border-radius:12px;font-family:'Sora',sans-serif;font-weight:700;font-size:16px;box-shadow:0 4px 20px #16a34a50">Start Tracking</button>
+    <div style="font-size:11px;color:#9ca3af;text-align:center;margin-top:12px">Your data stays private on your device</div>
+  </div>
+</div>
+
+<div id="app" class="hidden">
+  <div id="header">
+    <div class="hdr-top">
+      <div>
+        <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:20px;color:#fff">LIX Finance</div>
+        <div style="font-size:11px;color:#bbf7d0">Smart Money OS</div>
+      </div>
+      <div id="salaryArea"></div>
+    </div>
+    <div class="corpus-strip">
+      <div>
+        <div style="font-size:10px;color:#bbf7d0;font-weight:600">CORPUS (Opening - Spent)</div>
+        <div id="corpusVal" style="font-family:'Sora',sans-serif;font-weight:800;font-size:15px;color:#fff">&#8377;0.00</div>
+      </div>
+      <div style="text-align:right">
+        <div id="lentStrip" class="hidden">
+          <div style="font-size:10px;color:#93c5fd;font-weight:600">LENT OUT</div>
+          <div id="lentHeaderVal" style="font-family:'Sora',sans-serif;font-weight:800;font-size:14px;color:#93c5fd"></div>
+        </div>
+        <div id="recvStrip" class="hidden">
+          <div style="font-size:10px;color:#bbf7d0;font-weight:600">RECEIVED</div>
+          <div id="recvHeaderVal" style="font-family:'Sora',sans-serif;font-weight:800;font-size:13px;color:#bbf7d0"></div>
+        </div>
+      </div>
+    </div>
+    <div class="tabs">
+      <button class="tab active" onclick="showTab('expenses',this)"><div style="font-size:15px">&#128184;</div><div>Expenses</div></button>
+      <button class="tab" onclick="showTab('portfolio',this)"><div style="font-size:15px">&#128202;</div><div>Portfolio</div></button>
+      <button class="tab" onclick="showTab('insights',this)"><div style="font-size:15px">&#128200;</div><div>Insights</div></button>
+      <button class="tab" onclick="showTab('wisdom',this)"><div style="font-size:15px">&#128214;</div><div>Wisdom</div></button>
+    </div>
+  </div>
+
+  <div id="tab-expenses" class="screen active">
+    <div class="card" style="padding:20px">
+      <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:15px;color:#14532d;margin-bottom:14px">Add Expense</div>
+      <div class="grid2">
+        <div><label class="lbl">Date</label><input type="date" id="expDate" class="inp"/></div>
+        <div><label class="lbl">Amount</label><input type="number" id="expAmt" class="inp" placeholder="0.00"/></div>
+      </div>
+      <div class="grid2">
+        <div>
+          <label class="lbl">Category</label>
+          <div style="display:flex;gap:6px">
+            <select id="expCat" class="inp" style="flex:1"></select>
+            <button onclick="showCatAdd()" style="background:#16a34a;color:#fff;border-radius:8px;padding:0 14px;font-weight:700;font-size:20px;flex-shrink:0">+</button>
+          </div>
+          <div id="catAddBox" style="display:none;gap:6px;margin-top:6px">
+            <input type="text" id="newCatInput" class="inp" placeholder="e.g. Juice, Salon" style="flex:1"/>
+            <button onclick="addCustomCat()" style="background:#16a34a;color:#fff;border-radius:8px;padding:6px 12px;font-weight:700;font-size:13px;flex-shrink:0">Add</button>
+            <button onclick="hideCatAdd()" style="background:#f0fdf4;color:#6b7280;border-radius:8px;padding:6px 10px;font-size:13px;border:1px solid #dcfce7;flex-shrink:0">X</button>
+          </div>
+        </div>
+        <div>
+          <label class="lbl">Tag</label>
+          <select id="expTag" class="inp">
+            <option value="asset">Asset-Building</option>
+            <option value="necessity" selected>Necessity</option>
+            <option value="liability">Liability</option>
+            <option value="lent">Lent / Recoverable</option>
+          </select>
+        </div>
+      </div>
+      <div style="margin-bottom:12px"><label class="lbl">Description</label><input type="text" id="expDesc" class="inp" placeholder="What did you spend on?"/></div>
+      <div id="spendAlert" style="display:none;border-radius:10px;padding:10px 14px;margin-bottom:12px;font-size:13px;font-weight:500"></div>
+      <button id="addExpBtn" onclick="addExpense()" style="width:100%;padding:13px;background:linear-gradient(135deg,#16a34a,#16a34acc);color:#fff;border-radius:10px;font-family:'Sora',sans-serif;font-weight:700;font-size:14px;box-shadow:0 4px 14px #16a34a50">Add Expense</button>
+    </div>
+    <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap">
+      <input type="text" id="searchInput" class="inp" placeholder="Search..." style="flex:1;min-width:120px;padding:8px 12px" oninput="renderExpenses()"/>
+      <select id="filterCat" class="inp" style="padding:8px 10px;width:auto" onchange="renderExpenses()"><option value="">All Categories</option></select>
+      <select id="filterTag" class="inp" style="padding:8px 10px;width:auto" onchange="renderExpenses()">
+        <option value="">All Tags</option><option value="asset">Asset</option><option value="necessity">Necessity</option><option value="liability">Liability</option><option value="lent">Lent</option>
+      </select>
+    </div>
+    <div id="expenseList"></div>
+    <!-- Money Received -->
+    <div class="card" style="padding:18px;border:1px solid #bbf7d0;background:#f0fdf4">
+      <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:14px;color:#14532d;margin-bottom:12px">&#128176; Money Received (adds to Corpus)</div>
+      <div style="font-size:12px;color:#6b7280;margin-bottom:12px">Use this when someone returns lent money, you get a refund, or any cash comes IN to you.</div>
+      <div class="grid2">
+        <div><label class="lbl">Date</label><input type="date" id="recvDate" class="inp"/></div>
+        <div><label class="lbl">Amount</label><input type="number" id="recvAmt" class="inp" placeholder="0.00"/></div>
+      </div>
+      <div style="margin-bottom:12px">
+        <label class="lbl">From / Reason</label>
+        <input type="text" id="recvDesc" class="inp" placeholder="e.g. Ramgopal Anna returned money, Refund from Amazon"/>
+      </div>
+      <button onclick="addReceived()" style="width:100%;padding:12px;background:linear-gradient(135deg,#0891b2,#0891b2cc);color:#fff;border-radius:10px;font-family:'Sora',sans-serif;font-weight:700;font-size:14px;box-shadow:0 4px 14px #0891b250">+ Add Received Money</button>
+      <div id="receivedList" style="margin-top:12px"></div>
+    </div>
+  </div>
+
+  <div id="tab-portfolio" class="screen">
+    <div class="subtabs">
+      <button class="subtab active" onclick="showPortSub('nw',this)">Net Worth</button>
+      <button class="subtab" onclick="showPortSub('inv',this)">Investments</button>
+    </div>
+    <div id="port-nw">
+      <div class="info-box">Cash in Hand = opening balance minus all expenses. Net Worth = Cash + Assets + Investments - Debts.</div>
+      <div class="sum-grid" id="portSumCards"></div>
+      <div class="nw-big">
+        <div><div style="font-size:12px;color:#7c3aed;font-weight:600">NET WORTH</div><div style="font-size:11px;color:#7c3aed">Cash + Assets + Investments - Debts</div></div>
+        <div id="netWorthVal" style="font-family:'Sora',sans-serif;font-weight:800;font-size:22px;color:#7c3aed">&#8377;0</div>
+      </div>
+      <div class="sec-head" style="color:#16a34a">Savings and Assets</div>
+      <div id="assetsList"></div>
+      <button onclick="addAsset()" style="width:100%;padding:10px;background:#dcfce7;color:#16a34a;border:1px dashed #16a34a;border-radius:10px;font-family:'Sora',sans-serif;font-weight:700;font-size:13px;margin-bottom:14px">+ Add Asset / Savings</button>
+      <div class="sec-head" style="color:#dc2626">Debts and Liabilities</div>
+      <div id="liabsList"></div>
+      <button onclick="addLiab()" style="width:100%;padding:10px;background:#fee2e2;color:#dc2626;border:1px dashed #dc2626;border-radius:10px;font-family:'Sora',sans-serif;font-weight:700;font-size:13px">+ Add Liability</button>
+    </div>
+    <div id="port-inv" class="hidden">
+      <div class="sum-grid" id="invSumCards"></div>
+      <div id="stocksList"></div>
+      <button onclick="addStock()" style="width:100%;padding:10px;background:#dcfce7;color:#16a34a;border:1px dashed #16a34a;border-radius:10px;font-family:'Sora',sans-serif;font-weight:700;font-size:13px">+ Add Holding</button>
+    </div>
+  </div>
+
+  <div id="tab-insights" class="screen">
+    <div class="subtabs">
+      <button class="subtab active" onclick="showInsSub('daily',this)">Daily</button>
+      <button class="subtab" onclick="showInsSub('cats',this)">Categories</button>
+      <button class="subtab" onclick="showInsSub('kiy',this)">Kiyosaki</button>
+    </div>
+    <div id="ins-daily">
+      <div class="card"><div style="font-family:'Sora',sans-serif;font-weight:700;font-size:14px;color:#14532d;margin-bottom:8px">Daily Spend Chart</div><div style="font-size:12px;color:#6b7280;margin-bottom:12px">Red=1.5x avg | Yellow=above avg | Green=normal</div><div class="bar-chart" id="barChart"></div></div>
+      <div class="card"><div style="font-family:'Sora',sans-serif;font-weight:700;font-size:14px;color:#14532d;margin-bottom:12px">Top 3 Heavy-Spend Days</div><div id="top3List"></div></div>
+    </div>
+    <div id="ins-cats" class="hidden">
+      <div class="card"><div style="font-family:'Sora',sans-serif;font-weight:700;font-size:14px;color:#14532d;margin-bottom:10px">Category Breakdown</div><div style="display:flex;justify-content:center"><canvas id="pieChart" width="200" height="200"></canvas></div></div>
+      <div class="card"><div style="font-family:'Sora',sans-serif;font-weight:700;font-size:14px;color:#14532d;margin-bottom:12px">Category % Bars</div><div id="catBars"></div></div>
+    </div>
+    <div id="ins-kiy" class="hidden">
+      <div class="card"><div style="font-family:'Sora',sans-serif;font-weight:700;font-size:14px;color:#14532d;margin-bottom:8px">Kiyosaki Tag Distribution</div><div class="bar-chart" id="kiyChart"></div></div>
+      <div class="card"><div style="font-family:'Sora',sans-serif;font-weight:700;font-size:14px;color:#14532d;margin-bottom:12px">Tag Summary</div><div id="tagBars"></div><div style="margin-top:12px;padding:12px;background:#f0fdf4;border-radius:10px;font-size:13px;color:#14532d">Ideal: Asset 30%+ | Necessity max 50% | Liability max 20%</div></div>
+      <div id="lentCard" class="card hidden"><div style="font-family:'Sora',sans-serif;font-weight:700;font-size:14px;color:#14532d;margin-bottom:12px">Lent and Recoverable Money</div><div style="background:#dbeafe;border-radius:10px;padding:10px 14px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center"><span style="font-size:13px;font-weight:600;color:#1e40af">Total Lent Out</span><span id="lentTotal" style="font-family:'Sora',sans-serif;font-weight:800;font-size:17px;color:#2563eb"></span></div><div id="lentList"></div><div style="margin-top:10px;font-size:12px;color:#6b7280;font-style:italic">These amounts are expected to be returned.</div></div>
+    </div>
+  </div>
+
+  <div id="tab-wisdom" class="screen">
+    <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:18px;color:#14532d;margin-bottom:4px">Financial Wisdom</div>
+    <div style="font-size:13px;color:#6b7280;margin-bottom:20px">Rich Dad Poor Dad and Psychology of Money</div>
+    <div id="wisdomList"></div>
+  </div>
+
+  <button id="pdfBtn" onclick="doPDF()">&#128196; PDF</button>
+</div>
+
+<script>
+var S={opening:0,setupDone:false,expenses:[],received:[],portfolio:{assets:[],liabilities:[],stocks:[]},income:0,customCats:[]};
+var RUP='\u20B9';
+var DCATS=['Food','Transport','Utilities','Health','Education','Shopping','Entertainment','Investments','Other'];
+var TAG={asset:{label:'Asset',c:'#16a34a',bg:'#dcfce7'},necessity:{label:'Necessity',c:'#d97706',bg:'#fef3c7'},liability:{label:'Liability',c:'#dc2626',bg:'#fee2e2'},lent:{label:'Lent',c:'#2563eb',bg:'#dbeafe'}};
+var PIEC=['#16a34a','#0891b2','#7c3aed','#d97706','#dc2626','#db2777','#4f46e5','#0d9488','#65a30d'];
+var WIS=[
+  {b:'Rich Dad Poor Dad',p:'The rich do not work for money - they make money work for them.',d:'Assets put money in your pocket. Liabilities take it out. Most people spend their lives buying liabilities they think are assets.'},
+  {b:'Rich Dad Poor Dad',p:'Financial literacy is the foundation of wealth.',d:'Understanding cash flow and balance sheets matters more than your salary. The rich acquire assets; the poor acquire liabilities.'},
+  {b:'Rich Dad Poor Dad',p:'Mind your own business - your real business is your asset column.',d:'Your job is your profession. Your business is your asset portfolio: real estate, stocks, bonds, intellectual property.'},
+  {b:'Rich Dad Poor Dad',p:'The poor avoid risk. The rich manage risk.',d:'Financial intelligence lets you take more risk not less. Ignorance keeps people poor not lack of money.'},
+  {b:'Psychology of Money',p:'Wealth is what you do not see.',d:'Spending money to show people how much money you have is the fastest way to have less. True wealth is invisible.'},
+  {b:'Psychology of Money',p:'Getting wealthy and staying wealthy are different skills.',d:'Getting money requires optimism and risk. Keeping it requires humility and frugality. Survival is the prerequisite to compounding.'},
+  {b:'Psychology of Money',p:'Time is the most powerful force in investing.',d:'Warren Buffett is rich because he started at age 10 and never stopped. Good investing is about earning decent returns for a very long time.'},
+  {b:'Psychology of Money',p:'Reasonable beats Rational - stick to a reasonable plan.',d:'A strategy that is mathematically optimal but emotionally impossible will fail. Pick a plan you can live with when the market drops 30%.'}
+];
+
+function sv(){try{localStorage.setItem('lx_e',JSON.stringify(S.expenses));localStorage.setItem('lx_r',JSON.stringify(S.received));localStorage.setItem('lx_p',JSON.stringify(S.portfolio));localStorage.setItem('lx_i',String(S.income));localStorage.setItem('lx_c',JSON.stringify(S.customCats));localStorage.setItem('lx_o',String(S.opening));}catch(e){}}
+function ld(){try{var e=localStorage.getItem('lx_e');if(e)S.expenses=JSON.parse(e);var p=localStorage.getItem('lx_p');if(p)S.portfolio=JSON.parse(p);var i=localStorage.getItem('lx_i');if(i)S.income=Number(i);var r2=localStorage.getItem('lx_r');if(r2)S.received=JSON.parse(r2);var c=localStorage.getItem('lx_c');if(c)S.customCats=JSON.parse(c);var o=localStorage.getItem('lx_o');if(o!==null){S.opening=Number(o);S.setupDone=true;}}catch(e){}}
+function fmt(n){return RUP+Number(n).toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2});}
+function fmtS(n){return RUP+Number(n).toLocaleString('en-IN',{maximumFractionDigits:0});}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function acats(){return DCATS.concat(S.customCats);}
+
+function doSetup(){
+  var v=parseFloat(document.getElementById('setupInput').value);
+  if(isNaN(v)||v<0){alert('Enter a valid amount');return;}
+  S.opening=v;S.setupDone=true;sv();initApp();
+}
+document.getElementById('setupInput').onkeydown=function(e){if(e.key==='Enter')doSetup();};
+
+function initApp(){
+  document.getElementById('setup').style.display='none';
+  document.getElementById('app').classList.remove('hidden');
+  var td=new Date().toISOString().slice(0,10);document.getElementById('expDate').value=td;document.getElementById('recvDate').value=td;
+  buildCatSel();renderHdr();renderExpenses();renderReceived();renderPortfolio();renderInsights();renderWisdom();
+}
+
+function renderHdr(){
+  var sp=S.expenses.reduce(function(a,e){return a+e.amt;},0);
+  var totalRec=S.received.reduce(function(a,r){return a+r.amt;},0);
+  var corpus=S.opening+totalRec-sp;
+  var sav=S.income-sp;
+  var lent=S.expenses.filter(function(e){return e.tag==='lent';}).reduce(function(a,e){return a+e.amt;},0);
+  var cv=document.getElementById('corpusVal');
+  cv.textContent=fmt(corpus);cv.style.color=corpus<2000?'#fca5a5':'#fff';
+  var ls=document.getElementById('lentStrip');
+  if(lent>0){ls.classList.remove('hidden');document.getElementById('lentHeaderVal').textContent=fmt(lent);}else{ls.classList.add('hidden');}
+  var totalR=S.received.reduce(function(a,r){return a+r.amt;},0);
+  var rs=document.getElementById('recvStrip');
+  if(totalR>0){rs.classList.remove('hidden');document.getElementById('recvHeaderVal').textContent='+'+fmt(totalR);}else{rs.classList.add('hidden');}
+  var sa=document.getElementById('salaryArea');
+  if(S.income>0){
+    sa.innerHTML='<div onclick="editSalary()" style="text-align:right;cursor:pointer">'
+      +'<div style="font-size:10px;color:#bbf7d0;font-weight:600">SALARY (tap to edit)</div>'
+      +'<div style="font-family:Sora,sans-serif;font-weight:800;font-size:15px;color:#fff">'+fmt(S.income)+'</div>'
+      +'<div style="font-size:11px;font-weight:600;color:'+(sav>=0?'#bbf7d0':'#fca5a5')+'">'+(sav>=0?'Savings: ':'Deficit: ')+fmt(Math.abs(sav))+'</div></div>';
+  } else {
+    sa.innerHTML='<button onclick="editSalary()" style="background:#ffffff30;border-radius:8px;padding:6px 12px;border:1px dashed #ffffff60;color:#fff;font-size:11px;font-weight:600">+ Set Salary</button>';
+  }
+}
+function editSalary(){
+  var cur=S.income>0?S.income:'';
+  var v=prompt('Enter your monthly salary:',cur);
+  if(v===null)return;
+  var n=parseFloat(v);
+  if(!isNaN(n)&&n>=0){S.income=n;sv();renderHdr();}
+}
+
+function showTab(name,btn){
+  document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});
+  document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active');});
+  document.getElementById('tab-'+name).classList.add('active');btn.classList.add('active');
+  if(name==='insights')renderInsights();
+  if(name==='portfolio')renderPortfolio();
+}
+
+function buildCatSel(){
+  var cats=acats();
+  var opts=cats.map(function(c){return '<option value="'+esc(c)+'">'+esc(c)+'</option>';}).join('');
+  document.getElementById('expCat').innerHTML=opts;
+  document.getElementById('filterCat').innerHTML='<option value="">All Categories</option>'+opts;
+}
+function showCatAdd(){var b=document.getElementById('catAddBox');b.style.display='flex';document.getElementById('newCatInput').focus();}
+function hideCatAdd(){document.getElementById('catAddBox').style.display='none';document.getElementById('newCatInput').value='';}
+function addCustomCat(){
+  var v=document.getElementById('newCatInput').value.trim();
+  if(!v)return;
+  if(acats().indexOf(v)<0){S.customCats.push(v);sv();buildCatSel();}
+  document.getElementById('expCat').value=v;hideCatAdd();
+}
+document.getElementById('newCatInput').onkeydown=function(e){if(e.key==='Enter')addCustomCat();if(e.key==='Escape')hideCatAdd();};
+
+function chkAlert(amt,cat,date){
+  var tAmt=S.expenses.filter(function(e){return e.date===date&&e.cat===cat;}).reduce(function(a,e){return a+e.amt;},0)+Number(amt);
+  var yd=new Date(date);yd.setDate(yd.getDate()-1);var ys=yd.toISOString().slice(0,10);
+  var yAmt=S.expenses.filter(function(e){return e.date===ys&&e.cat===cat;}).reduce(function(a,e){return a+e.amt;},0);
+  var wds=[1,2,3,4,5,6,7].map(function(i){var d=new Date(date);d.setDate(d.getDate()-i);return d.toISOString().slice(0,10);});
+  var wAvg=wds.reduce(function(a,d){return a+S.expenses.filter(function(e){return e.date===d&&e.cat===cat;}).reduce(function(aa,e){return aa+e.amt;},0);},0)/7;
+  if(yAmt>0&&tAmt>yAmt*1.2)return{type:'red',msg:cat+' ('+fmtS(tAmt)+') is 20%+ above yesterday ('+fmtS(yAmt)+')'};
+  if(wAvg>0&&tAmt>wAvg*1.3)return{type:'yellow',msg:cat+' ('+fmtS(tAmt)+') is 30%+ above 7-day avg ('+fmtS(wAvg)+')'};
+  return null;
+}
+function playBeep(type){try{var ctx=new(window.AudioContext||window.webkitAudioContext)();[0,0.35,0.7].forEach(function(t){var o=ctx.createOscillator(),g=ctx.createGain();o.connect(g);g.connect(ctx.destination);o.frequency.value=type==='red'?880:660;g.gain.setValueAtTime(0.3,ctx.currentTime+t);g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+t+0.2);o.start(ctx.currentTime+t);o.stop(ctx.currentTime+t+0.25);});}catch(e){}}
+
+function addExpense(){
+  var date=document.getElementById('expDate').value;
+  var amt=document.getElementById('expAmt').value;
+  var cat=document.getElementById('expCat').value;
+  var tag=document.getElementById('expTag').value;
+  var desc=document.getElementById('expDesc').value.trim();
+  if(!date||!amt||Number(amt)<=0||!desc){alert('Please fill all fields');return;}
+  var a=chkAlert(amt,cat,date);
+  var ab=document.getElementById('spendAlert');
+  var btn=document.getElementById('addExpBtn');
+  if(a){
+    ab.style.display='block';
+    ab.style.background=a.type==='red'?'#fee2e2':'#fef9c3';
+    ab.style.border='1px solid '+(a.type==='red'?'#fca5a5':'#fde68a');
+    ab.style.color=a.type==='red'?'#dc2626':'#92400e';
+    ab.textContent=(a.type==='red'?'Overspending: ':'Warning: ')+a.msg;
+    btn.style.background=a.type==='red'?'linear-gradient(135deg,#dc2626,#dc2626cc)':'linear-gradient(135deg,#d97706,#d97706cc)';
+    playBeep(a.type);
+  } else {
+    ab.style.display='none';
+    btn.style.background='linear-gradient(135deg,#16a34a,#16a34acc)';
+  }
+  S.expenses.unshift({id:'e'+Date.now(),date:date,cat:cat,tag:tag,amt:Number(amt),desc:desc});
+  document.getElementById('expAmt').value='';document.getElementById('expDesc').value='';
+  sv();renderHdr();renderExpenses();
+}
+document.getElementById('expDesc').onkeydown=function(e){if(e.key==='Enter')addExpense();};
+
+function delExp(id){S.expenses=S.expenses.filter(function(e){return e.id!==id;});sv();renderHdr();renderExpenses();}
+
+function renderExpenses(){
+  var srch=document.getElementById('searchInput').value.toLowerCase();
+  var fc=document.getElementById('filterCat').value;
+  var ft=document.getElementById('filterTag').value;
+  var list=S.expenses.filter(function(e){
+    if(fc&&e.cat!==fc)return false;
+    if(ft&&e.tag!==ft)return false;
+    if(srch&&e.desc.toLowerCase().indexOf(srch)<0)return false;
+    return true;
+  }).sort(function(a,b){return b.date.localeCompare(a.date);});
+  var grp={};list.forEach(function(e){if(!grp[e.date])grp[e.date]=[];grp[e.date].push(e);});
+  var dates=Object.keys(grp).sort(function(a,b){return b.localeCompare(a);});
+  var html='';
+  dates.forEach(function(d){
+    var dt=grp[d].reduce(function(a,e){return a+e.amt;},0);
+    html+='<div style="display:flex;justify-content:space-between;padding:6px 12px;background:#dcfce7;border-radius:8px;margin-bottom:6px">'
+      +'<span style="font-family:Sora,sans-serif;font-weight:700;font-size:13px;color:#14532d">'+esc(new Date(d+'T12:00:00').toLocaleDateString('en-IN',{weekday:'short',day:'numeric',month:'short',year:'numeric'}))+'</span>'
+      +'<span style="font-family:Sora,sans-serif;font-weight:700;font-size:13px;color:#16a34a">'+fmt(dt)+'</span></div>';
+    grp[d].forEach(function(e){
+      var t=TAG[e.tag]||TAG.necessity;
+      html+='<div style="background:#fff;border-radius:12px;padding:12px 14px;margin-bottom:8px;box-shadow:0 1px 6px #16a34a12;border:1px solid #dcfce7;display:flex;align-items:center;gap:12px;border-left:3px solid '+t.c+'">'
+        +'<div style="flex:1"><div style="display:flex;gap:6px;margin-bottom:3px">'
+        +'<span style="font-size:11px;font-weight:600;background:'+t.bg+';color:'+t.c+';border-radius:6px;padding:2px 7px">'+esc(e.cat)+'</span>'
+        +'<span style="font-size:11px;font-weight:600;background:'+t.bg+';color:'+t.c+';border-radius:6px;padding:2px 6px">'+esc(t.label)+'</span>'
+        +'</div><div style="font-size:14px;font-weight:500;color:#14532d">'+esc(e.desc)+'</div></div>'
+        +'<div style="text-align:right"><div style="font-family:Sora,sans-serif;font-weight:700;font-size:14px;color:#14532d">'+fmt(e.amt)+'</div>'
+        +'<button onclick="delExp(this.dataset.id)" data-id="'+esc(e.id)+'" style="background:none;font-size:14px;color:#dc2626;font-weight:700;padding:2px 4px;border:none">x</button>'
+        +'</div></div>';
+    });
+  });
+  if(!html)html='<div style="text-align:center;color:#6b7280;padding:40px;font-size:14px">No expenses yet. Add your first one above!</div>';
+  document.getElementById('expenseList').innerHTML=html;
+}
+
+function showPortSub(name,btn){
+  document.querySelectorAll('#tab-portfolio .subtab').forEach(function(b){b.classList.remove('active');});btn.classList.add('active');
+  document.getElementById('port-nw').classList.toggle('hidden',name!=='nw');
+  document.getElementById('port-inv').classList.toggle('hidden',name!=='inv');
+}
+function addAsset(){S.portfolio.assets.push({id:'a'+Date.now(),name:'New Asset',value:0,notes:''});sv();renderPortfolio();}
+function addLiab(){S.portfolio.liabilities.push({id:'l'+Date.now(),name:'New Liability',value:0,notes:''});sv();renderPortfolio();}
+function addStock(){S.portfolio.stocks.push({id:'st'+Date.now(),name:'New Holding',qty:1,buyPrice:100,curPrice:100,type:'stock'});sv();renderPortfolio();}
+function delStock(id){S.portfolio.stocks=S.portfolio.stocks.filter(function(s){return s.id!==id;});sv();renderPortfolio();}
+function upd(arr,id,f,v){var x=S.portfolio[arr].find(function(i){return i.id===id;});if(!x)return;x[f]=['value','qty','buyPrice','curPrice'].indexOf(f)>=0?Number(v)||0:v;sv();renderHdr();renderPortfolio();}
+function updN(el,arr,id,f){upd(arr,id,f,el.value);}
+
+
+function renderPortfolio(){
+  var sp=S.expenses.reduce(function(a,e){return a+e.amt;},0);
+  var totalRec=S.received.reduce(function(a,r){return a+r.amt;},0);
+  var corpus=S.opening+totalRec-sp;
+  var totalRecP=S.received.reduce(function(a,r){return a+r.amt;},0);
+  var tA=S.portfolio.assets.reduce(function(a,x){return a+x.value;},0);
+  var tL=S.portfolio.liabilities.reduce(function(a,x){return a+x.value;},0);
+  var tSV=S.portfolio.stocks.reduce(function(a,x){return a+x.qty*x.curPrice;},0);
+  var tSC=S.portfolio.stocks.reduce(function(a,x){return a+x.qty*x.buyPrice;},0);
+  var nw=corpus+tA+tSV-tL;
+  document.getElementById('netWorthVal').textContent=fmt(nw);
+  var sc=[{l:'Cash in Hand',v:corpus,c:'#0891b2',bg:'#e0f2fe'},{l:'Savings/Assets',v:tA,c:'#16a34a',bg:'#dcfce7'},{l:'Investments',v:tSV,c:'#7c3aed',bg:'#ede9fe'},{l:'Debts',v:tL,c:'#dc2626',bg:'#fee2e2'}];
+  document.getElementById('portSumCards').innerHTML=sc.map(function(c){return '<div style="background:'+c.bg+';border-radius:12px;padding:14px 16px;border:1px solid '+c.c+'30"><div style="font-size:10px;color:'+c.c+';font-weight:600;margin-bottom:4px">'+c.l+'</div><div style="font-family:Sora,sans-serif;font-weight:800;font-size:16px;color:'+c.c+'">'+fmt(c.v)+'</div></div>';}).join('');
+  document.getElementById('assetsList').innerHTML=S.portfolio.assets.map(function(a){
+    return '<div class="card" style="padding:12px;margin-bottom:8px"><input value="'+esc(a.name)+'" class="inp" style="font-weight:600;margin-bottom:6px" oninput="upd(\'assets\',\''+a.id+'\',\'name\',this.value)"/><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px"><input type="number" value="'+a.value+'" class="inp" style="padding:6px 10px" placeholder="Value" oninput="upd(\'assets\',\''+a.id+'\',\'value\',this.value)"/><input value="'+esc(a.notes)+'" class="inp" style="padding:6px 10px" placeholder="Notes" oninput="upd(\'assets\',\''+a.id+'\',\'notes\',this.value)"/></div></div>';
+  }).join('');
+  document.getElementById('liabsList').innerHTML=S.portfolio.liabilities.map(function(l){
+    return '<div class="card" style="padding:12px;margin-bottom:8px"><input value="'+esc(l.name)+'" class="inp" style="font-weight:600;margin-bottom:6px" oninput="upd(\'liabilities\',\''+l.id+'\',\'name\',this.value)"/><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px"><input type="number" value="'+l.value+'" class="inp" style="padding:6px 10px" placeholder="Amount" oninput="upd(\'liabilities\',\''+l.id+'\',\'value\',this.value)"/><input value="'+esc(l.notes)+'" class="inp" style="padding:6px 10px" placeholder="Notes" oninput="upd(\'liabilities\',\''+l.id+'\',\'notes\',this.value)"/></div></div>';
+  }).join('');
+  var pnlT=tSV-tSC;
+  document.getElementById('invSumCards').innerHTML=[{l:'Invested',v:tSC,c:'#0891b2',bg:'#e0f2fe'},{l:'Current',v:tSV,c:'#16a34a',bg:'#dcfce7'},{l:'P and L',v:pnlT,c:pnlT>=0?'#16a34a':'#dc2626',bg:pnlT>=0?'#dcfce7':'#fee2e2'}].map(function(c){return '<div style="background:'+c.bg+';border-radius:12px;padding:12px;border:1px solid '+c.c+'30;text-align:center"><div style="font-size:10px;color:'+c.c+';font-weight:600">'+c.l+'</div><div style="font-family:Sora,sans-serif;font-weight:800;font-size:15px;color:'+c.c+'">'+fmt(c.v)+'</div></div>';}).join('');
+  document.getElementById('stocksList').innerHTML=S.portfolio.stocks.map(function(s){
+    var pnl=s.qty*(s.curPrice-s.buyPrice);var pct=s.buyPrice>0?((s.curPrice-s.buyPrice)/s.buyPrice*100).toFixed(1):'0.0';
+    return '<div class="card" style="margin-bottom:10px"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px"><div style="flex:1"><input value="'+esc(s.name)+'" class="inp" style="font-weight:700;padding:4px 8px;margin-bottom:4px" oninput="updN(this,\'stocks\',this.dataset.id,\'name\')" data-id="'+s.id+'"/><select class="inp" style="padding:3px 6px;width:auto;font-size:11px" onchange="updN(this,\'stocks\',this.dataset.id,\'type\')" data-id="'+s.id+'"><option value="stock"'+(s.type==='stock'?' selected':'')+'>Stock</option><option value="mf"'+(s.type==='mf'?' selected':'')+'>Mutual Fund</option></select></div><div style="text-align:right"><div style="font-family:Sora,sans-serif;font-weight:700;font-size:15px;color:'+(pnl>=0?'#16a34a':'#dc2626')+'">'+(pnl>=0?'+':'')+fmt(pnl)+'</div><div style="font-size:11px;font-weight:600;color:'+(pnl>=0?'#16a34a':'#dc2626')+'">'+pct+'%</div></div></div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:8px"><div><div style="font-size:10px;color:#6b7280;margin-bottom:2px">Qty</div><input type="number" value="'+s.qty+'" class="inp" style="padding:5px 8px;font-size:13px" oninput="updN(this,\'stocks\',this.dataset.id,\'qty\')" data-id="'+s.id+'"/></div><div><div style="font-size:10px;color:#6b7280;margin-bottom:2px">Buy</div><input type="number" value="'+s.buyPrice+'" class="inp" style="padding:5px 8px;font-size:13px" oninput="updN(this,\'stocks\',this.dataset.id,\'buyPrice\')" data-id="'+s.id+'"/></div><div><div style="font-size:10px;color:#6b7280;margin-bottom:2px">Cur</div><input type="number" value="'+s.curPrice+'" class="inp" style="padding:5px 8px;font-size:13px" oninput="updN(this,\'stocks\',this.dataset.id,\'curPrice\')" data-id="'+s.id+'"/></div></div><div style="text-align:right"><button onclick="delStock(this.dataset.id)" data-id="'+s.id+'" style="background:#fee2e2;color:#dc2626;border:none;border-radius:6px;padding:4px 12px;font-size:12px;font-weight:600">Remove</button></div></div>';
+  }).join('');
+}
+
+function showInsSub(name,btn){
+  document.querySelectorAll('#tab-insights .subtab').forEach(function(b){b.classList.remove('active');});btn.classList.add('active');
+  ['daily','cats','kiy'].forEach(function(n){document.getElementById('ins-'+n).classList.toggle('hidden',n!==name);});
+  if(name==='cats')drawPie();
+}
+
+function renderInsights(){
+  var byDate={};S.expenses.forEach(function(e){byDate[e.date]=(byDate[e.date]||0)+e.amt;});
+  var dates=Object.keys(byDate).sort();
+  var avgD=dates.length?dates.reduce(function(a,d){return a+byDate[d];},0)/dates.length:1;
+  var maxD=dates.reduce(function(m,d){return Math.max(m,byDate[d]);},0)||1;
+  // Bar chart
+  var bh='';
+  if(!dates.length){bh='<div style="color:#6b7280;font-size:13px;padding:20px">No data yet</div>';}
+  else{dates.forEach(function(d){var v=byDate[d];var h=Math.round((v/maxD)*130);var col=v>=avgD*1.5?'#dc2626':v>=avgD?'#d97706':'#16a34a';var lb=d.slice(5);bh+='<div class="bar-wrap"><div style="height:'+h+'px;background:'+col+';border-radius:4px 4px 0 0;width:100%;cursor:pointer" title="'+fmt(v)+'"></div><div class="bar-lbl">'+lb+'</div></div>';});}
+  document.getElementById('barChart').innerHTML=bh;
+  // Top 3
+  var top3=dates.slice().sort(function(a,b){return byDate[b]-byDate[a];}).slice(0,3);
+  var t3='';
+  top3.forEach(function(d,i){var cats={};S.expenses.filter(function(e){return e.date===d;}).forEach(function(e){cats[e.cat]=(cats[e.cat]||0)+e.amt;});var tc=Object.keys(cats).sort(function(a,b){return cats[b]-cats[a];})[0]||'';var dl=new Date(d+'T12:00:00').toLocaleDateString('en-IN',{day:'numeric',month:'short'});var v=byDate[d];var col=v>=avgD*1.5?'#dc2626':v>=avgD?'#d97706':'#16a34a';t3+='<div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:'+(i<2?'1px solid #f0fdf4':'none')+'">'+'<div style="font-family:Sora,sans-serif;font-weight:800;font-size:22px;color:#16a34a;width:30px">'+(i+1)+'</div>'+'<div style="flex:1"><div style="font-weight:600;font-size:14px;color:#14532d">'+esc(dl)+'</div><div style="font-size:12px;color:#6b7280">Heaviest: '+esc(tc)+' ('+fmtS(cats[tc]||0)+')</div></div>'+'<div style="font-family:Sora,sans-serif;font-weight:700;color:'+col+'">'+fmt(v)+'</div></div>';});
+  document.getElementById('top3List').innerHTML=t3||'<div style="color:#6b7280;font-size:13px">No data yet</div>';
+  // Cat bars
+  var byCat={};S.expenses.forEach(function(e){byCat[e.cat]=(byCat[e.cat]||0)+e.amt;});
+  var tot=Object.values(byCat).reduce(function(a,v){return a+v;},0)||1;
+  var ce=Object.entries(byCat).sort(function(a,b){return b[1]-a[1];});
+  document.getElementById('catBars').innerHTML=ce.map(function(arr,i){var pct=(arr[1]/tot*100).toFixed(1);return '<div class="pct-row"><div style="display:flex;justify-content:space-between;font-size:13px;font-weight:500;margin-bottom:4px"><span style="color:#14532d">'+esc(arr[0])+'</span><span style="font-family:Sora,sans-serif;font-weight:700;color:'+PIEC[i%9]+'">'+pct+'% - '+fmtS(arr[1])+'</span></div><div class="pct-track"><div class="pct-fill" style="width:'+pct+'%;background:'+PIEC[i%9]+'"></div></div></div>';}).join('')||'<div style="color:#6b7280;font-size:13px">No data yet</div>';
+  // Kiyosaki
+  var bt={asset:0,necessity:0,liability:0,lent:0};S.expenses.forEach(function(e){bt[e.tag]=(bt[e.tag]||0)+e.amt;});
+  var td=[{n:'Asset',v:bt.asset,c:'#16a34a'},{n:'Necessity',v:bt.necessity,c:'#d97706'},{n:'Liability',v:bt.liability,c:'#dc2626'},{n:'Lent',v:bt.lent,c:'#2563eb'}];
+  var tmx=td.reduce(function(m,t){return Math.max(m,t.v);},0)||1;
+  document.getElementById('kiyChart').innerHTML=td.map(function(t){var h=Math.round((t.v/tmx)*130);return '<div class="bar-wrap" style="min-width:50px"><div style="height:'+h+'px;background:'+t.c+';border-radius:4px 4px 0 0;width:100%;cursor:pointer" title="'+fmt(t.v)+'"></div><div class="bar-lbl" style="font-size:9px">'+t.n+'</div></div>';}).join('');
+  var ttot=td.reduce(function(a,t){return a+t.v;},0)||1;
+  document.getElementById('tagBars').innerHTML=td.map(function(t){var pct=(t.v/ttot*100).toFixed(1);return '<div class="pct-row"><div style="display:flex;justify-content:space-between;font-size:13px;font-weight:500;margin-bottom:4px"><span style="color:#14532d">'+t.n+'</span><span style="font-family:Sora,sans-serif;font-weight:700;color:'+t.c+'">'+pct+'% - '+fmt(t.v)+'</span></div><div class="pct-track"><div class="pct-fill" style="width:'+pct+'%;background:'+t.c+'"></div></div></div>';}).join('');
+  // Lent
+  var li=S.expenses.filter(function(e){return e.tag==='lent';});
+  var lc=document.getElementById('lentCard');
+  if(bt.lent>0){
+    lc.classList.remove('hidden');
+    document.getElementById('lentTotal').textContent=fmt(bt.lent);
+    document.getElementById('lentList').innerHTML=li.map(function(e){var dl=new Date(e.date+'T12:00:00').toLocaleDateString('en-IN',{day:'numeric',month:'short'});return '<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #eff6ff;font-size:13px"><div><div style="font-weight:600;color:#1e40af">'+esc(e.desc)+'</div><div style="font-size:11px;color:#6b7280">'+dl+'</div></div><div style="font-family:Sora,sans-serif;font-weight:700;color:#2563eb">'+fmt(e.amt)+'</div></div>';}).join('');
+  } else {lc.classList.add('hidden');}
+  if(!document.getElementById('ins-cats').classList.contains('hidden'))drawPie();
+}
+
+function drawPie(){
+  var byCat={};S.expenses.forEach(function(e){byCat[e.cat]=(byCat[e.cat]||0)+e.amt;});
+  var entries=Object.entries(byCat);var tot=entries.reduce(function(a,x){return a+x[1];},0);
+  var cv=document.getElementById('pieChart');if(!cv)return;var ctx=cv.getContext('2d');ctx.clearRect(0,0,200,200);
+  if(!tot){ctx.fillStyle='#e5e7eb';ctx.beginPath();ctx.arc(100,100,80,0,Math.PI*2);ctx.fill();return;}
+  var st=0;entries.forEach(function(arr,i){var sl=arr[1]/tot*Math.PI*2;ctx.beginPath();ctx.moveTo(100,100);ctx.arc(100,100,80,st,st+sl);ctx.closePath();ctx.fillStyle=PIEC[i%PIEC.length];ctx.fill();st+=sl;});
+}
+
+function renderWisdom(){
+  document.getElementById('wisdomList').innerHTML=WIS.map(function(w,i){
+    return '<div class="card" style="cursor:pointer;margin-bottom:10px" onclick="togWis('+i+')">'
+      +'<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px">'
+      +'<div style="flex:1"><div style="font-size:10px;font-weight:700;color:#16a34a;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px">'+esc(w.b)+'</div>'
+      +'<div style="font-family:Sora,sans-serif;font-weight:700;font-size:14px;color:#14532d;line-height:1.4">'+esc(w.p)+'</div></div>'
+      +'<div id="wa'+i+'" style="color:#16a34a;font-weight:700;font-size:18px;flex-shrink:0">&#62;</div></div>'
+      +'<div id="wd'+i+'" style="display:none;margin-top:10px;padding:10px 12px;background:#f0fdf4;border-radius:8px;font-size:13px;color:#374151;line-height:1.6;border-left:3px solid #16a34a">'+esc(w.d)+'</div>'
+      +'</div>';
+  }).join('');
+}
+function togWis(i){var d=document.getElementById('wd'+i);var a=document.getElementById('wa'+i);if(d.style.display==='none'){d.style.display='block';a.innerHTML='v';}else{d.style.display='none';a.innerHTML='&#62;';}}
+
+function addReceived(){
+  var date=document.getElementById('recvDate').value;
+  var amt=document.getElementById('recvAmt').value;
+  var desc=document.getElementById('recvDesc').value.trim();
+  if(!date||!amt||Number(amt)<=0||!desc){alert('Please fill all fields');return;}
+  S.received.unshift({id:'r'+Date.now(),date:date,amt:Number(amt),desc:desc});
+  document.getElementById('recvAmt').value='';document.getElementById('recvDesc').value='';
+  sv();renderHdr();renderReceived();renderPortfolio();
+}
+function delReceived(id){S.received=S.received.filter(function(r){return r.id!==id;});sv();renderHdr();renderReceived();renderPortfolio();}
+function renderReceived(){
+  var el=document.getElementById('receivedList');if(!el)return;
+  if(!S.received.length){el.innerHTML='';return;}
+  var html='<div style="font-family:Sora,sans-serif;font-weight:700;font-size:12px;color:#0891b2;margin-bottom:8px;text-transform:uppercase">Received Entries</div>';
+  S.received.forEach(function(r){
+    var dl=new Date(r.date+'T12:00:00').toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});
+    html+='<div style="display:flex;align-items:center;gap:10px;padding:8px 10px;background:#fff;border-radius:10px;margin-bottom:6px;border:1px solid #bae6fd;border-left:3px solid #0891b2">'
+      +'<div style="flex:1"><div style="font-size:13px;font-weight:500;color:#14532d">'+esc(r.desc)+'</div>'
+      +'<div style="font-size:11px;color:#6b7280">'+esc(dl)+'</div></div>'
+      +'<div style="font-family:Sora,sans-serif;font-weight:700;font-size:14px;color:#0891b2">+'+fmt(r.amt)+'</div>'
+      +'<button onclick="delReceived(this.dataset.id)" data-id="'+esc(r.id)+'" style="background:none;font-size:14px;color:#dc2626;font-weight:700;padding:2px 4px;border:none">x</button>'
+      +'</div>';
+  });
+  el.innerHTML=html;
+}
+function doPDF(){
+  var sp=S.expenses.reduce(function(a,e){return a+e.amt;},0);
+  var totalRec=S.received.reduce(function(a,r){return a+r.amt;},0);
+  var corpus=S.opening+totalRec-sp;var sav=S.income-sp;
+  var byDate={};S.expenses.forEach(function(e){if(!byDate[e.date])byDate[e.date]=[];byDate[e.date].push(e);});
+  var dates=Object.keys(byDate).sort();
+  var byCat={};S.expenses.forEach(function(e){byCat[e.cat]=(byCat[e.cat]||0)+e.amt;});
+  var f=function(n){return RUP+Number(n).toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2});};
+  var h='<!DOCTYPE html><html><head><meta charset="UTF-8"/><title>LIX Finance</title><style>body{font-family:sans-serif;padding:30px;color:#14532d;max-width:900px;margin:0 auto}h1{font-size:26px;color:#16a34a}h2{font-size:15px;margin:20px 0 8px;border-bottom:2px solid #dcfce7;padding-bottom:4px}table{width:100%;border-collapse:collapse;font-size:13px;margin-bottom:12px}th{background:#16a34a;color:#fff;padding:8px 10px;text-align:left}td{padding:7px 10px;border-bottom:1px solid #f0fdf4}tr:nth-child(even){background:#f9fffe}.cards{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:16px}.card{background:#f0fdf4;border-radius:8px;padding:12px 18px}.cl{font-size:11px;color:#6b7280;font-weight:600}.cv{font-size:18px;font-weight:800;color:#16a34a}.red{color:#dc2626}.grn{color:#16a34a}</style></head><body>'
+    +'<h1>LIX Finance Statement</h1><p style="color:#6b7280;font-size:13px">'+new Date().toLocaleString('en-IN')+'</p>'
+    +'<h2>Summary</h2><div class="cards"><div class="card"><div class="cl">Opening</div><div class="cv">'+f(S.opening)+'</div></div><div class="card"><div class="cl">Total Spent</div><div class="cv red">'+f(sp)+'</div></div><div class="card"><div class="cl">Cash in Hand</div><div class="cv">'+f(corpus)+'</div></div>'
+    +(S.income>0?'<div class="card"><div class="cl">Salary</div><div class="cv">'+f(S.income)+'</div></div><div class="card"><div class="cl">Savings</div><div class="cv '+(sav>=0?'grn':'red')+'">'+f(sav)+'</div></div>':'')
+    +'</div><h2>Transactions</h2>'
+    +dates.map(function(d){return '<p style="font-weight:700;color:#16a34a;margin:12px 0 4px">'+new Date(d+'T12:00:00').toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'long'})+' | Total: '+f(byDate[d].reduce(function(a,e){return a+e.amt;},0))+'</p><table><tr><th>Category</th><th>Description</th><th>Tag</th><th>Amount</th></tr>'+byDate[d].map(function(e){return '<tr><td>'+e.cat+'</td><td>'+e.desc+'</td><td>'+e.tag+'</td><td>'+f(e.amt)+'</td></tr>';}).join('')+'</table>';}).join('')
+    +'<h2>Category Summary</h2><table><tr><th>Category</th><th>Amount</th><th>%</th></tr>'+Object.entries(byCat).sort(function(a,b){return b[1]-a[1];}).map(function(arr){return '<tr><td>'+arr[0]+'</td><td>'+f(arr[1])+'</td><td>'+(arr[1]/sp*100||0).toFixed(1)+'%</td></tr>';}).join('')+'</table>'
+    +'<script>window.print()<\/script></body></html>';
+  var w=window.open('','_blank');if(w){w.document.write(h);w.document.close();}
+}
+
+ld();
+if(S.setupDone)initApp();
+</script>
+</body>
+</html>
